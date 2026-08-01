@@ -1,0 +1,597 @@
+# For most projects, this workflow file will not need changing; you simply need
+# to commit it to your repository.
+#
+# You may wish to alter this file to override the set of languages analyzed,
+# or to provide custom queries or build logic.
+#
+# ******** NOTE ********
+# We have attempted to detect the languages in your repository. Please check
+# the `language` matrix defined below to confirm you have the correct set of
+# supported CodeQL languages.
+#
+name: "CodeQL Advanced"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '38 14 * * 5'
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    # Runner size impacts CodeQL analysis time. To learn more, please see:
+    #   - https://gh.io/recommended-hardware-resources-for-running-codeql
+    #   - https://gh.io/supported-runners-and-hardware-resources
+    #   - https://gh.io/using-larger-runners (GitHub.com only)
+    # Consider using larger runners or machines with greater resources for possible analysis time improvements.
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    permissions:
+      # required for all workflows
+      security-events: write
+
+      # required to fetch internal or private CodeQL packs
+      packages: read
+
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        # CodeQL supports the following values keywords for 'language': 'actions', 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'rust', 'swift'
+        # Use `c-cpp` to analyze code written in C, C++ or both
+        # Use 'java-kotlin' to analyze code written in Java, Kotlin or both
+        # Use 'javascript-typescript' to analyze code written in JavaScript, TypeScript or both
+        # To learn more about changing the languages that are analyzed or customizing the build mode for your analysis,
+        # see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning.
+        # If you are analyzing a compiled language, you can modify the 'build-mode' for that language to customize how
+        # your codebase is analyzed, see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/codeql-code-scanning-for-compiled-languages
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Add any setup steps before running the `github/codeql-action/init` action.
+    # This includes steps like installing compilers or runtimes (`actions/setup-node`
+    # or others). This is typically only required for manual builds.
+    # - name: Setup runtime (example)
+    #   uses: actions/setup-example@v1
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with "+" to use these queries and those in the config file.
+
+        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        # queries: security-extended,security-and-quality
+
+    # If the analyze step fails for one of the languages you are analyzing with
+    # "We were unable to automatically build your code", modify the matrix above
+    # to set the build mode to "manual" for that language. Then modify this step
+    # to build your code.
+    # ℹ️ Command-line programs to run using the OS shell.
+    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+    - name: Run manual build steps
+      if: matrix.build-mode == 'manual'
+      shell: bash
+      run: |
+        echo 'If you are using a "manual" build mode for one or more of the' \
+          'languages you are analyzing, replace this with the commands to build' \
+          'your code, for example:'
+        echo '  make bootstrap'
+        echo '  make release'
+        exit 1
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v4
+      with:
+        category: "/language:${{matrix.language}}"import 'package:flutter/material.dart';
+
+// ==========================================
+// 1. DATA MODELS (نماذج البيانات)
+// ==========================================
+class OfferBanner {
+  final String id;
+  final String title;
+  final String subtitle;
+  final Color color;
+  final IconData icon;
+
+  OfferBanner({
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    required this.icon,
+  });
+}
+
+class CategoryItem {
+  final String title;
+  final IconData icon;
+  final Color color;
+
+  CategoryItem({
+    required this.title,
+    required this.icon,
+    required this.color,
+  });
+}
+
+class FeaturedStore {
+  final String id;
+  final String name;
+  final String category;
+  final double rating;
+  final String deliveryTime;
+
+  FeaturedStore({
+    required this.id,
+    required this.name,
+    required this.category,
+    required this.rating,
+    required this.deliveryTime,
+  });
+}
+
+// ==========================================
+// 2. MAIN SCREEN WIDGET
+// ==========================================
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _currentNavIndex = 0;
+  String _selectedProvince = 'صنعاء';
+  final PageController _bannerController = PageController();
+
+  final List<String> _provinces = ['صنعاء', 'عدن', 'تعز', 'حضرموت', 'إب', 'مأرب'];
+
+  final List<OfferBanner> _banners = [
+    OfferBanner(
+      id: '1',
+      title: 'خصم 30% على المطاعم 🔥',
+      subtitle: 'استخدم كود: YEMEN30 عند الدفع',
+      color: const Color(0xFF0F52BA),
+      icon: Icons.local_offer_rounded,
+    ),
+    OfferBanner(
+      id: '2',
+      title: 'توصيل مجاني للسوبرماركت 🛒',
+      subtitle: 'للطلبات الأكبر من 5000 ر.ي',
+      color: const Color(0xFF00BFA5),
+      icon: Icons.local_shipping_rounded,
+    ),
+    OfferBanner(
+      id: '3',
+      title: 'عروض الصيدليات المميزة 💊',
+      subtitle: 'خصومات خاصة على المستلزمات الطبية',
+      color: const Color(0xFFE91E63),
+      icon: Icons.health_and_safety_rounded,
+    ),
+  ];
+
+  final List<CategoryItem> _categories = [
+    CategoryItem(title: 'المطاعم', icon: Icons.restaurant_rounded, color: const Color(0xFFFF5252)),
+    CategoryItem(title: 'السوبرماركت', icon: Icons.shopping_cart_rounded, color: const Color(0xFF00BFA5)),
+    CategoryItem(title: 'الصيدليات', icon: Icons.local_pharmacy_rounded, color: const Color(0xFF0091EA)),
+    CategoryItem(title: 'السيارات', icon: Icons.directions_car_rounded, color: const Color(0xFFFF9100)),
+    CategoryItem(title: 'السفر', icon: Icons.flight_takeoff_rounded, color: const Color(0xFF7C4DFF)),
+    CategoryItem(title: 'الفنادق', icon: Icons.hotel_rounded, color: const Color(0xFFE91E63)),
+    CategoryItem(title: 'البنوك', icon: Icons.account_balance_rounded, color: const Color(0xFF00897B)),
+    CategoryItem(title: 'الخدمات', icon: Icons.grid_view_rounded, color: const Color(0xFFFFB300)),
+  ];
+
+  final List<FeaturedStore> _featuredStores = [
+    FeaturedStore(id: 's1', name: 'مطعم الشيباني الحديث', category: 'مطاعم شعبية', rating: 4.8, deliveryTime: '25-35 دقيقة'),
+    FeaturedStore(id: 's2', name: 'سوبرماركت الجند', category: 'مواد غذائية', rating: 4.6, deliveryTime: '20-30 دقيقة'),
+    FeaturedStore(id: 's3', name: 'صيدلية العوضي', category: 'أدوية ومستلزمات', rating: 4.9, deliveryTime: '15-25 دقيقة'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: IndexedStack(
+        index: _currentNavIndex,
+        children: [
+          _buildHomePage(),
+          _buildPlaceholderPage('صفحة الطلبات 📦', Icons.inventory_2_rounded),
+          _buildPlaceholderPage('صفحة المفضلة ❤️', Icons.favorite_rounded),
+          _buildPlaceholderPage('صفحة الحساب 👤', Icons.person_rounded),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentNavIndex,
+          onTap: (index) {
+            setState(() {
+              _currentNavIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: const Color(0xFF0F52BA),
+          unselectedItemColor: Colors.grey.shade400,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontSize: 12),
+          elevation: 0,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: 'الرئيسية'),
+            BottomNavigationBarItem(icon: Icon(Icons.inventory_2_rounded), label: 'الطلبات'),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite_rounded), label: 'المفضلة'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_rounded), label: 'الحساب'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ==========================================
+  // HOME PAGE BUILDER
+  // ==========================================
+  Widget _buildHomePage() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(),
+          const SizedBox(height: 16),
+          _buildOffersSlider(),
+          const SizedBox(height: 20),
+          _buildCategoryGrid(),
+          const SizedBox(height: 24),
+          _buildFeaturedStores(),
+          const SizedBox(height: 24),
+          _buildLatestOffers(),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  // 1. HOME HEADER (الشعار + المحافظة + البحث)
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 20),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF0A367C), Color(0xFF0F52BA)],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+        ),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 20,
+                    child: Icon(Icons.bolt_rounded, color: Color(0xFFFFB300), size: 26),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'الفائق يمن',
+                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              InkWell(
+                onTap: _showProvincePicker,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.18),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.location_on_rounded, color: Color(0xFFFFB300), size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        _selectedProvince,
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                      ),
+                      const Icon(Icons.arrow_drop_down, color: Colors.white, size: 20),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const TextField(
+              decoration: InputDecoration(
+                hintText: 'ابحث عن مطعم، منتج، أو خدمة...',
+                hintStyle: TextStyle(fontSize: 13, color: Colors.grey),
+                prefixIcon: Icon(Icons.search_rounded, color: Color(0xFF0F52BA)),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 2. OFFERS SLIDER (سلايدر العروض المتحركة)
+  Widget _buildOffersSlider() {
+    return SizedBox(
+      height: 125,
+      child: PageView.builder(
+        controller: _bannerController,
+        itemCount: _banners.length,
+        itemBuilder: (context, index) {
+          final banner = _banners[index];
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: banner.color,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        banner.title,
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        banner.subtitle,
+                        style: const TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(banner.icon, color: Colors.white.withOpacity(0.3), size: 55),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // 3. CATEGORY GRID (شبكة الأقسام الرئيسيّة)
+  Widget _buildCategoryGrid() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('الأقسام', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 14,
+              childAspectRatio: 0.85,
+            ),
+            itemCount: _categories.length,
+            itemBuilder: (context, index) {
+              final cat = _categories[index];
+              return InkWell(
+                onTap: () {},
+                borderRadius: BorderRadius.circular(16),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: cat.color.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Icon(cat.icon, color: cat.color, size: 28),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      cat.title,
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 4. FEATURED STORES (المتاجر المميزة)
+  Widget _buildFeaturedStores() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text('⭐ المتاجر المميزة', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 120,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            itemCount: _featuredStores.length,
+            itemBuilder: (context, index) {
+              final store = _featuredStores[index];
+              return Container(
+                width: 220,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(store.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                    const SizedBox(height: 4),
+                    Text(store.category, style: TextStyle(color: Colors.grey.shade600, fontSize: 11)),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
+                            Text(' ${store.rating}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        Text(store.deliveryTime, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 5. LATEST OFFERS (أحدث العروض)
+  Widget _buildLatestOffers() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('🔥 أحدث العروض', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF5252).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.local_fire_department_rounded, color: Color(0xFFFF5252), size: 30),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('وجبة عائلية متكاملة بـ 5000 ر.ي فقط', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                      SizedBox(height: 2),
+                      Text('عرض لفترة محدودة من مطعم الفاخر', style: TextStyle(color: Colors.grey, fontSize: 11)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // PROVINCE SELECTOR DIALOG
+  void _showProvincePicker() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: _provinces
+              .map((p) => ListTile(
+                    title: Text(p, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    trailing: _selectedProvince == p ? const Icon(Icons.check_circle_rounded, color: Color(0xFF0F52BA)) : null,
+                    onTap: () {
+                      setState(() => _selectedProvince = p);
+                      Navigator.pop(context);
+                    },
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  // PLACEHOLDER FOR OTHER NAV TABS
+  Widget _buildPlaceholderPage(String title, IconData icon) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 60, color: const Color(0xFF0F52BA)),
+          const SizedBox(height: 12),
+          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+}
+
