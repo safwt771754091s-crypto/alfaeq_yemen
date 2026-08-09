@@ -1,0 +1,10 @@
+{
+  "app_name": "الفائق يمن",
+  "welcome": "أهلًا بك في الفائق يمن 👋",
+  "search_hint": "ابحث عن مطعم، منتج، أو خدمة...",
+  "sections": "الأقسام",
+  "add_to_cart": "أضف إلى السلة",
+  "free_delivery": "التوصيل مجاني لجميع المحافظات",
+  "switch_language": "تبديل اللغة",
+  "price_example": "السعر: {price}"
+}
