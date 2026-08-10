@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:intl/intl.dart';
+import 'config.dart';
+import 'screens/settings_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await AppConfig.load();
 
   runApp(
     EasyLocalization(
@@ -45,7 +48,18 @@ class HomePage extends StatelessWidget {
 
   String _formatPrice(BuildContext context, double value) {
     final localeName = context.locale.languageCode == 'ar' ? 'ar_SA' : 'en_US';
-    final symbol = context.locale.languageCode == 'ar' ? 'ر.ي' : '\$';
+    final currentCurrency = AppConfig.currency.value;
+    String symbol;
+    switch (currentCurrency) {
+      case 'USD':
+        symbol = '\$';
+        break;
+      case 'EGP':
+        symbol = 'E£';
+        break;
+      default:
+        symbol = 'ر.ي';
+    }
     return NumberFormat.currency(locale: localeName, symbol: symbol).format(value);
   }
 
@@ -61,13 +75,14 @@ class HomePage extends StatelessWidget {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.language),
+              icon: const Icon(Icons.settings),
               onPressed: () {
-                // toggle language
-                final newLocale = context.locale.languageCode == 'ar' ? const Locale('en') : const Locale('ar');
-                context.setLocale(newLocale);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                );
               },
-              tooltip: tr('switch_language'),
+              tooltip: tr('settings'),
             ),
           ],
         ),
@@ -106,16 +121,21 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(8)),
-                child: Row(
-                  children: [
-                    const Icon(Icons.local_shipping, color: Colors.green),
-                    const SizedBox(width: 8),
-                    Text(tr('free_delivery'), style: const TextStyle(color: Colors.green)),
-                  ],
-                ),
+              ValueListenableBuilder<bool>(
+                valueListenable: AppConfig.freeDelivery,
+                builder: (context, free, _) {
+                  return Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(8)),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.local_shipping, color: Colors.green),
+                        const SizedBox(width: 8),
+                        Text(free ? tr('free_delivery') : tr('delivery_not_free'), style: const TextStyle(color: Colors.green)),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),
