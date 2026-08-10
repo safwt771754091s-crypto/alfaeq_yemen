@@ -1,23 +1,43 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:intl/intl.dart';
 import 'config.dart';
 import 'screens/settings_screen.dart';
 
+// Firebase imports
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await AppConfig.load();
 
-  runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('ar'), Locale('en')],
-      path: 'assets/translations', // <-- change the path as needed
-      fallbackLocale: const Locale('ar'),
-      saveLocale: true,
-      child: const MyApp(),
-    ),
-  );
+  // Initialize Firebase inside a guarded zone to capture errors
+  await Firebase.initializeApp();
+
+  // Pass uncaught Flutter errors to Crashlytics
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+  };
+
+  // Capture errors from zones
+  runZonedGuarded(() {
+    runApp(
+      EasyLocalization(
+        supportedLocales: const [Locale('ar'), Locale('en')],
+        path: 'assets/translations', // <-- change the path as needed
+        fallbackLocale: const Locale('ar'),
+        saveLocale: true,
+        child: const MyApp(),
+      ),
+    );
+  }, (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  });
 }
 
 class MyApp extends StatelessWidget {

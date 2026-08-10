@@ -22,7 +22,7 @@ class AppConfig {
 
   static Future<void> setCurrency(String code) async {
     final sp = await SharedPreferences.getInstance();
-    await sp.setString(_kCurrency_KEY, code);
+    await sp.setString(_kCurrencyKey, code);
     currency.value = code;
   }
 }
