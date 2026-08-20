@@ -23,8 +23,9 @@ jobs:
 
       - name: Build APK
         run: |
-          TARGET_DIR=$(dirname $(find . -name "pubspec.yaml" | head -n 1))
-          cd "$TARGET_DIR"
+          MAIN_PATH=$(find . -path "*/lib/main.dart" | head -n 1)
+          PROJ_DIR=$(dirname $(dirname "$MAIN_PATH"))
+          cd "$PROJ_DIR"
           flutter pub get
           flutter build apk --debug --no-tree-shake-icons
 
@@ -32,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: alfaeq_yemen_app
-          path: '**/*.apk'
+          path: '**/build/app/outputs/flutter-apk/*.apk'
