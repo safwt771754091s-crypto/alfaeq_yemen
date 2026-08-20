@@ -21,11 +21,22 @@ jobs:
         with:
           channel: 'stable'
 
+      - name: Debug Project Structure
+        run: |
+          echo "=== Displaying Repository Structure ==="
+          find . -maxdepth 3 -not -path '*/.*'
+
       - name: Build APK
         run: |
-          MAIN_FILE=$(find . -name "main.dart" | grep "lib/main.dart" | head -n 1)
-          LIB_DIR=$(dirname "$MAIN_FILE")
-          PROJ_ROOT=$(dirname "$LIB_DIR")
+          # البحث المباشر عن أي ملف ينتهي بـ main.dart
+          TARGET_MAIN=$(find . -name "main.dart" | head -n 1)
+          
+          if [ -z "$TARGET_MAIN" ]; then
+            echo "Error: main.dart was not pushed to GitHub repository!"
+            exit 1
+          fi
+          
+          PROJ_ROOT=$(dirname $(dirname "$TARGET_MAIN"))
           cd "$PROJ_ROOT"
           
           flutter pub get
