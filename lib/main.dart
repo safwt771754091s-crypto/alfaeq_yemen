@@ -372,7 +372,7 @@ class MoreMenuScreen extends StatelessWidget {
             subtitle: 'إدارة المنصة بالكامل والذكاء الاصطناعي',
             icon: Icons.admin_panel_settings,
             color: Colors.indigo,
-            target: const SuperAdminDashboardScreen(),
+            target: SuperAdminDashboardScreen(),
           ),
           _buildMenuCard(
             context,
@@ -380,7 +380,7 @@ class MoreMenuScreen extends StatelessWidget {
             subtitle: 'تنبيهات الطلبات المباشرة والعروض',
             icon: Icons.notifications_active,
             color: Colors.amber,
-            target: const NotificationServiceScreen(),
+            target: NotificationServiceScreen(),
           ),
           _buildMenuCard(
             context,
@@ -388,7 +388,7 @@ class MoreMenuScreen extends StatelessWidget {
             subtitle: 'حالة التخزين المحلي والعمل بدون إنترنت',
             icon: Icons.wifi_off,
             color: Colors.teal,
-            target: const OfflineCacheService(),
+            target: OfflineCacheService(),
           ),
         ],
       ),
