@@ -6,16 +6,15 @@ import 'screens/payment_wallet.dart';
 import 'screens/super_admin_dashboard.dart';
 import 'screens/offline_cache_service.dart';
 import 'screens/notification_service.dart';
-import 'screens/advanced_search.dart';
 import 'screens/category_screen.dart';
 import 'screens/cart_screen.dart';
 
 void main() {
-  runApp(const AlFaeqApp());
+  runApp( AlFaeqApp());
 }
 
 class AlFaeqApp extends StatelessWidget {
-  const AlFaeqApp({Key? key}) : super(key: key);
+   AlFaeqApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +22,17 @@ class AlFaeqApp extends StatelessWidget {
       title: 'الفائق يمن',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFF0F172A),
-        scaffoldBackgroundColor: const Color(0xFFF1F5F9),
+        primaryColor:  Color(0xFF0F172A),
+        scaffoldBackgroundColor:  Color(0xFFF1F5F9),
         fontFamily: 'Arial',
       ),
-      home: const MainNavigationScreen(),
+      home:  MainNavigationScreen(),
     );
   }
 }
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({Key? key}) : super(key: key);
+   MainNavigationScreen({Key? key}) : super(key: key);
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
@@ -53,20 +52,20 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         textDirection: TextDirection.rtl,
         child: AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text('تأكيد الخروج', style: TextStyle(fontWeight: FontWeight.bold)),
-          content: const Text('هل توافق على الخروج من تطبيق الفائق يمن؟'),
+          title:  Text('تأكيد الخروج', style: TextStyle(fontWeight: FontWeight.bold)),
+          content:  Text('هل توافق على الخروج من تطبيق الفائق يمن؟'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('لا / إلغاء', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+              child:  Text('لا / إلغاء', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
               onPressed: () => SystemNavigator.pop(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFDC2626),
+                backgroundColor:  Color(0xFFDC2626),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: const Text('نعم، خروج', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              child:  Text('نعم، خروج', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -79,10 +78,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       HomeScreenContent(onCartUpdated: _refreshCart),
-      const AdvancedSearchScreen(),
-      const YemenMapsScreen(),
-      const PaymentWalletScreen(),
-      const MoreMenuScreen(),
+      AdvancedSearchScreen(),
+       YemenMapsScreen(),
+       PaymentWalletScreen(),
+       MoreMenuScreen(),
     ];
 
     int totalCartCount = CartManager.totalCount;
@@ -105,12 +104,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   left: 16,
                   right: 16,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding:  EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF16A34A),
+                      color:  Color(0xFF16A34A),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
-                        BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4)),
+                        BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 10, offset:  Offset(0, 4)),
                       ],
                     ),
                     child: Row(
@@ -118,19 +117,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.shopping_cart_rounded, color: Colors.white, size: 24),
-                            const SizedBox(width: 10),
+                             Icon(Icons.shopping_cart_rounded, color: Colors.white, size: 24),
+                             SizedBox(width: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   'السلة ($totalCartCount عناصر)',
-                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                                  style:  TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                 ),
                                 Text(
                                   'الإجمالي: $totalCartPrice ر.ي',
-                                  style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w600),
+                                  style:  TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -138,16 +137,16 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            await Navigator.push(context, MaterialPageRoute(builder: (_) => const CartScreen()));
+                            await Navigator.push(context, MaterialPageRoute(builder: (_) =>  CartScreen()));
                             _refreshCart();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF16A34A),
+                            foregroundColor:  Color(0xFF16A34A),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             elevation: 0,
                           ),
-                          child: const Text('عرض السلة', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                          child:  Text('عرض السلة', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                         ),
                       ],
                     ),
@@ -161,7 +160,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 BoxShadow(
                   color: Colors.black.withOpacity(0.08),
                   blurRadius: 20,
-                  offset: const Offset(0, -4),
+                  offset:  Offset(0, -4),
                 ),
               ],
             ),
@@ -170,12 +169,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               onTap: (index) => setState(() => _currentIndex = index),
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.white,
-              selectedItemColor: const Color(0xFF1E3A8A),
-              unselectedItemColor: const Color(0xFF94A3B8),
-              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-              unselectedLabelStyle: const TextStyle(fontSize: 11),
+              selectedItemColor:  Color(0xFF1E3A8A),
+              unselectedItemColor:  Color(0xFF94A3B8),
+              selectedLabelStyle:  TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+              unselectedLabelStyle:  TextStyle(fontSize: 11),
               elevation: 0,
-              items: const [
+              items:  [
                 BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'الرئيسية'),
                 BottomNavigationBarItem(icon: Icon(Icons.search_rounded), label: 'البحث'),
                 BottomNavigationBarItem(icon: Icon(Icons.near_me_rounded), label: 'التوصيل'),
@@ -192,9 +191,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
 class HomeScreenContent extends StatelessWidget {
   final VoidCallback onCartUpdated;
-  const HomeScreenContent({Key? key, required this.onCartUpdated}) : super(key: key);
+   HomeScreenContent({Key? key, required this.onCartUpdated}) : super(key: key);
 
-  final List<Map<String, dynamic>> categories = const [
+  final List<Map<String, dynamic>> categories =  [
     {'name': 'الملابس والأزياء', 'icon': Icons.checkroom, 'color': Color(0xFF2563EB)},
     {'name': 'أدوات التجميل', 'icon': Icons.face_retouching_natural, 'color': Color(0xFFD946EF)},
     {'name': 'المطاعم والوجبات', 'icon': Icons.restaurant, 'color': Color(0xFFF97316)},
@@ -209,32 +208,32 @@ class HomeScreenContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1E3A8A),
+        backgroundColor:  Color(0xFF1E3A8A),
         elevation: 0,
         toolbarHeight: 70,
         title: Row(
           children: [
-            const Icon(Icons.location_on_rounded, color: Colors.amber, size: 20),
-            const SizedBox(width: 4),
-            const Text('التوصيل إلى: ', style: TextStyle(fontSize: 12, color: Colors.white70)),
-            const Text('عدن - خور مكسر', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
-            const Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 18),
-            const Spacer(),
+             Icon(Icons.location_on_rounded, color: Colors.amber, size: 20),
+             SizedBox(width: 4),
+             Text('التوصيل إلى: ', style: TextStyle(fontSize: 12, color: Colors.white70)),
+             Text('عدن - خور مكسر', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
+             Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 18),
+             Spacer(),
             IconButton(
               icon: Stack(
                 children: [
-                  const Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 26),
+                   Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 26),
                   if (CartManager.totalCount > 0)
                     Positioned(
                       right: 0,
                       top: 0,
                       child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                        constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
+                        padding:  EdgeInsets.all(2),
+                        decoration:  BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                        constraints:  BoxConstraints(minWidth: 14, minHeight: 14),
                         child: Text(
                           '${CartManager.totalCount}',
-                          style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
+                          style:  TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -242,7 +241,7 @@ class HomeScreenContent extends StatelessWidget {
                 ],
               ),
               onPressed: () async {
-                await Navigator.push(context, MaterialPageRoute(builder: (_) => const CartScreen()));
+                await Navigator.push(context, MaterialPageRoute(builder: (_) =>  CartScreen()));
                 onCartUpdated();
               },
             ),
@@ -250,13 +249,13 @@ class HomeScreenContent extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics:  BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: const Color(0xFF1E3A8A),
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              color:  Color(0xFF1E3A8A),
+              padding:  EdgeInsets.only(left: 16, right: 16, bottom: 16),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -266,25 +265,25 @@ class HomeScreenContent extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: 'ابحث عن صيدلية، مطعم، منتج، أو حجز...',
                     hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
-                    prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF1E3A8A)),
+                    prefixIcon:  Icon(Icons.search_rounded, color: Color(0xFF1E3A8A)),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                    contentPadding:  EdgeInsets.symmetric(vertical: 14),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const Padding(
+             SizedBox(height: 20),
+             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text('الأقسام الرئيسية', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
             ),
-            const SizedBox(height: 12),
+             SizedBox(height: 12),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding:  EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                physics:  NeverScrollableScrollPhysics(),
+                gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
                   childAspectRatio: 0.82,
                   crossAxisSpacing: 10,
@@ -312,7 +311,7 @@ class HomeScreenContent extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 6, offset: const Offset(0, 2)),
+                          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 6, offset:  Offset(0, 2)),
                         ],
                       ),
                       child: Column(
@@ -323,10 +322,10 @@ class HomeScreenContent extends StatelessWidget {
                             backgroundColor: (item['color'] as Color).withOpacity(0.1),
                             child: Icon(item['icon'] as IconData, color: item['color'] as Color, size: 22),
                           ),
-                          const SizedBox(height: 8),
+                           SizedBox(height: 8),
                           Text(
                             item['name'] as String,
-                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 10, color: Color(0xFF334155)),
+                            style:  TextStyle(fontWeight: FontWeight.w600, fontSize: 10, color: Color(0xFF334155)),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -336,7 +335,7 @@ class HomeScreenContent extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(height: 100),
+             SizedBox(height: 100),
           ],
         ),
       ),
@@ -345,18 +344,18 @@ class HomeScreenContent extends StatelessWidget {
 }
 
 class MoreMenuScreen extends StatelessWidget {
-  const MoreMenuScreen({Key? key}) : super(key: key);
+   MoreMenuScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('لوحات التحكم والأدوات'),
-        backgroundColor: const Color(0xFF1E3A8A),
+        title:  Text('لوحات التحكم والأدوات'),
+        backgroundColor:  Color(0xFF1E3A8A),
         centerTitle: true,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding:  EdgeInsets.all(16),
         children: [
           _buildMenuCard(
             context,
@@ -364,7 +363,7 @@ class MoreMenuScreen extends StatelessWidget {
             subtitle: 'إدارة المنتجات الخمسين والمخزون والطلبات',
             icon: Icons.storefront,
             color: Colors.blue,
-            target: const VendorDashboardScreen(),
+            target: VendorDashboardScreen(),
           ),
           _buildMenuCard(
             context,
@@ -404,16 +403,16 @@ class MoreMenuScreen extends StatelessWidget {
     required Widget target,
   }) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin:  EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: color.withOpacity(0.15),
           child: Icon(icon, color: color),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        title: Text(title, style:  TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(subtitle, style:  TextStyle(fontSize: 12)),
+        trailing:  Icon(Icons.arrow_forward_ios, size: 16),
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (_) => target));
         },
