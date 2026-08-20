@@ -21,14 +21,10 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Build APK from Project Root
+      - name: Build APK
         run: |
-          PUBSPEC_PATH=$(find . -name "pubspec.yaml" | head -n 1)
-          PROJ_ROOT=$(dirname "$PUBSPEC_PATH")
-          cd "$PROJ_ROOT"
-          sed -i 's/intl: ^0.18.1/intl: ^0.20.3/g' pubspec.yaml || true
-          flutter pub get
-          flutter build apk --debug --no-tree-shake-icons
+          find . -name "pubspec.yaml" -execdir flutter pub get \;
+          find . -name "pubspec.yaml" -execdir flutter build apk --debug --no-tree-shake-icons \;
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
