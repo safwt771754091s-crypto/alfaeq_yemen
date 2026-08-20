@@ -1,1 +1,37 @@
-# (انسخ الكود أعلاه هنا)
+name: Build Flutter APK
+
+on:
+  push:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Build APK from Project Root
+        run: |
+          PUBSPEC_PATH=$(find . -name "pubspec.yaml" | head -n 1)
+          PROJ_ROOT=$(dirname "$PUBSPEC_PATH")
+          cd "$PROJ_ROOT"
+          sed -i 's/intl: ^0.18.1/intl: ^0.20.3/g' pubspec.yaml || true
+          flutter pub get
+          flutter build apk --debug --no-tree-shake-icons
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: alfaeq_yemen_app
+          path: '**/build/app/outputs/flutter-apk/app-debug.apk'
