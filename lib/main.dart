@@ -388,7 +388,7 @@ class MoreMenuScreen extends StatelessWidget {
             subtitle: 'حالة التخزين المحلي والعمل بدون إنترنت',
             icon: Icons.wifi_off,
             color: Colors.teal,
-            target: OfflineCacheService(),
+            target: SizedBox(),
           ),
         ],
       ),
