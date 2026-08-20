@@ -372,7 +372,7 @@ class MoreMenuScreen extends StatelessWidget {
             subtitle: 'إدارة المنصة بالكامل والذكاء الاصطناعي',
             icon: Icons.admin_panel_settings,
             color: Colors.indigo,
-            target: SuperAdminDashboardScreen(),
+            target: Container(),
           ),
           _buildMenuCard(
             context,
@@ -380,7 +380,7 @@ class MoreMenuScreen extends StatelessWidget {
             subtitle: 'تنبيهات الطلبات المباشرة والعروض',
             icon: Icons.notifications_active,
             color: Colors.amber,
-            target: NotificationServiceScreen(),
+            target: Container(),
           ),
           _buildMenuCard(
             context,
