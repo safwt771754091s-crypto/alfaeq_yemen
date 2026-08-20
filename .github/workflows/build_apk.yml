@@ -23,9 +23,11 @@ jobs:
 
       - name: Build APK
         run: |
-          MAIN_PATH=$(find . -path "*/lib/main.dart" | head -n 1)
-          PROJ_DIR=$(dirname $(dirname "$MAIN_PATH"))
-          cd "$PROJ_DIR"
+          MAIN_FILE=$(find . -name "main.dart" | grep "lib/main.dart" | head -n 1)
+          LIB_DIR=$(dirname "$MAIN_FILE")
+          PROJ_ROOT=$(dirname "$LIB_DIR")
+          cd "$PROJ_ROOT"
+          
           flutter pub get
           flutter build apk --debug --no-tree-shake-icons
 
