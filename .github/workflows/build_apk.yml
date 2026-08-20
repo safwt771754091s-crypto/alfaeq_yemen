@@ -2,7 +2,7 @@ name: Build Flutter APK
 
 on:
   push:
-    branches: [ "**" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -22,14 +22,19 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Build APK
+      - name: Repair and Recreate Android Folder
         run: |
-          cd lib/..
-          flutter pub get
-          flutter build apk --debug --no-tree-shake-icons
+          rm -rf android
+          flutter create . --platforms=android --org com.example
 
-      - name: Upload APK
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build Debug APK
+        run: flutter build apk --debug --no-tree-shake-icons
+
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: alfaeq_yemen_app
-          path: 'build/app/outputs/flutter-apk/*.apk'
+          path: build/app/outputs/flutter-apk/app-debug.apk
