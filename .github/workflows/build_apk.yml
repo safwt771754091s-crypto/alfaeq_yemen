@@ -30,4 +30,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: alfaeq_yemen_app
-          path: '**/*.apk'
+          path: '**/build/app/outputs/flutter-apk/*.apk'
+          if-no-files-found: error
