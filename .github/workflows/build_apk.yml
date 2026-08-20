@@ -3,6 +3,7 @@ name: Build Flutter APK
 on:
   push:
     branches: [ "**" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,24 +22,9 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Debug Project Structure
-        run: |
-          echo "=== Displaying Repository Structure ==="
-          find . -maxdepth 3 -not -path '*/.*'
-
       - name: Build APK
         run: |
-          # البحث المباشر عن أي ملف ينتهي بـ main.dart
-          TARGET_MAIN=$(find . -name "main.dart" | head -n 1)
-          
-          if [ -z "$TARGET_MAIN" ]; then
-            echo "Error: main.dart was not pushed to GitHub repository!"
-            exit 1
-          fi
-          
-          PROJ_ROOT=$(dirname $(dirname "$TARGET_MAIN"))
-          cd "$PROJ_ROOT"
-          
+          cd lib/..
           flutter pub get
           flutter build apk --debug --no-tree-shake-icons
 
@@ -46,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: alfaeq_yemen_app
-          path: '**/build/app/outputs/flutter-apk/*.apk'
+          path: 'build/app/outputs/flutter-apk/*.apk'
