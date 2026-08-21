@@ -85,7 +85,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(store.name, style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 1),
                             Text(store.category, style: const TextStyle(color: Colors.grey, fontSize: 12)),
