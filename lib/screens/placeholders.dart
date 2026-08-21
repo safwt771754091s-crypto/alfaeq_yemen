@@ -25,3 +25,15 @@ class CategoryScreen extends StatelessWidget {
     );
   }
 }
+
+class VendorDashboardScreen extends StatelessWidget {
+  const VendorDashboardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('لوحة تحكم التاجر')),
+      body: const Center(child: Text('صفحة لوحة تحكم التاجر')),
+    );
+  }
+}
