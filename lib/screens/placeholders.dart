@@ -61,12 +61,23 @@ class DynamicPlaceholderScreen extends StatelessWidget {
 
 class CategoryScreen extends StatelessWidget {
   final String? categoryName;
-  const CategoryScreen({super.key, this.categoryName});
+  final dynamic categoryColor;
+  final dynamic categoryIcon;
+
+  const CategoryScreen({
+    super.key,
+    this.categoryName,
+    this.categoryColor,
+    this.categoryIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(categoryName ?? 'القسم')),
+      appBar: AppBar(
+        title: Text(categoryName ?? 'القسم'),
+        backgroundColor: categoryColor is Color ? categoryColor : null,
+      ),
       body: Center(child: Text('عرض قسم: ${categoryName ?? "غير محدد"}')),
     );
   }
@@ -84,7 +95,7 @@ class VendorDashboardScreen extends StatelessWidget {
   }
 }
 
-// شاشة السلة التفاعلية لعرض المنتجات والمجموع الحقيقي
+// شاشة السلة التفاعلية
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
