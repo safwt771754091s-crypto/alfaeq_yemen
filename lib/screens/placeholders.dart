@@ -53,7 +53,6 @@ final List<StoreItem> mockStores = [
   StoreItem(id: 's2', name: 'مطعم السعيد للمأكولات', category: 'المطاعم والوجبات', rating: '4.6', deliveryTime: '30-45 دقيقة', vendorInviteLink: 'https://app.yemen.express/vendor/add?id=s2'),
 ];
 
-// شاشة التوصيل المحدثة (بديل الخريطة) - تتبع الطلبات
 class YemenMapsScreen extends StatelessWidget {
   const YemenMapsScreen({super.key});
 
@@ -86,7 +85,7 @@ class YemenMapsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('حالة التوصيل المباشر', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text('يتم إسناد الكباتن والمناديب فور إتمام الطلب', style: TextStyle(fontSize: 12, color: Colors.black60)),
+                        Text('يتم إسناد الكباتن والمناديب فور إتمام الطلب', style: TextStyle(fontSize: 12, color: Colors.black54)),
                       ],
                     ),
                   ),
