@@ -1,5 +1,5 @@
 import 'package:alfaeq_yemen/screens/placeholders.dart';
-import 'features/vendor/vendor_dashboard_screen.dart';import 'screens/placeholders.dart';
+import 'screens/placeholders.dart';
 import 'screens/placeholders.dart';
 import 'screens/placeholders.dart';
 import 'package:flutter/material.dart';
