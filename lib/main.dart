@@ -111,7 +111,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // شريط البحث
             Container(
@@ -186,7 +186,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                       elevation: 3,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       child: Column(
-                        crossAxisAlignment: CrossAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
                             borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
@@ -196,7 +196,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
-                              crossAxisAlignment: CrossAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(p.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13), maxLines: 1),
                                 Text(p.storeName, style: const TextStyle(color: Colors.grey, fontSize: 11)),
