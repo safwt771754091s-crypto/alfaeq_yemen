@@ -22,7 +22,6 @@ class CartManager {
 
   static int get totalCount => items.fold(0, (sum, item) => sum + item.quantity);
 
-  // إرجاع القيمة كـ int مباشرة لتطابق المتغير int totalCartPrice في main.dart
   static int get totalPrice {
     double sum = items.fold(0.0, (s, item) => s + (item.price * item.quantity));
     return sum.toInt();
@@ -107,6 +106,18 @@ class PaymentWalletScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('المحفظة / وسائل الدفع')),
       body: const Center(child: Text('صفحة إدارة المحفظة والدفع')),
+    );
+  }
+}
+
+class YemenMapsScreen extends StatelessWidget {
+  const YemenMapsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('خرائط اليمن / التوصيل')),
+      body: const Center(child: Text('صفحة الخرائط والتوصيل')),
     );
   }
 }
