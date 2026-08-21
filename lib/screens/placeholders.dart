@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
+// أنواع الأدوار والصلاحيات
+enum UserRole { admin, vendor, customer }
+
+class CurrentUser {
+  static UserRole role = UserRole.admin; // تعيين الدور الحالي للاختبار
+  static String name = "صفوت محمد حسان";
+  static String storeName = "متجر الفائق الإلكتروني";
+}
+
+// نماذج البيانات
 class ProductItem {
   final String id;
   final String name;
   final String storeName;
   final double price;
   final String category;
-  final String imageUrl;
 
-  ProductItem({
-    required this.id,
-    required this.name,
-    required this.storeName,
-    required this.price,
-    required this.category,
-    required this.imageUrl,
-  });
+  ProductItem({required this.id, required this.name, required this.storeName, required this.price, required this.category});
 }
 
 class StoreItem {
@@ -24,17 +26,40 @@ class StoreItem {
   final String category;
   final String rating;
   final String deliveryTime;
-  final String imageUrl;
+  bool isActive;
 
-  StoreItem({
-    required this.id,
-    required this.name,
-    required this.category,
-    required this.rating,
-    required this.deliveryTime,
-    required this.imageUrl,
-  });
+  StoreItem({required this.id, required this.name, required this.category, required this.rating, required this.deliveryTime, this.isActive = true});
 }
+
+class PaymentMethod {
+  final String id;
+  final String name;
+  final String accountNumber;
+  bool isEnabled;
+
+  PaymentMethod({required this.id, required this.name, required this.accountNumber, this.isEnabled = true});
+}
+
+// بيانات المحافظ الإلكترونية المتاحة في اليمن
+final List<PaymentMethod> mockWallets = [
+  PaymentMethod(id: 'w1', name: 'حاسب / بنك الكريمي', accountNumber: '1234567'),
+  PaymentMethod(id: 'w2', name: 'محفظة تداول', accountNumber: '777000111'),
+  PaymentMethod(id: 'w3', name: 'محفظة جيب - Jaib', accountNumber: '733000222'),
+  PaymentMethod(id: 'w4', name: 'محفظة جوالي', accountNumber: '711000333'),
+];
+
+// بيانات المتاجر المعتمدة
+final List<StoreItem> mockStores = [
+  StoreItem(id: 's1', name: 'سوبرماركت البركة', category: 'السوبرماركت', rating: '4.8', deliveryTime: '20-30 دقيقة'),
+  StoreItem(id: 's2', name: 'مطعم السعيد للمأكولات', category: 'المطاعم والوجبات', rating: '4.6', deliveryTime: '30-45 دقيقة'),
+  StoreItem(id: 's3', name: 'صيدلية الشفاء الحديثة', category: 'الصيدليات والأدوية', rating: '4.9', deliveryTime: '15-25 دقيقة'),
+  StoreItem(id: 's4', name: 'مركز الجمال والأناقة', category: 'أدوات التجميل', rating: '4.7', deliveryTime: '25-40 دقيقة'),
+];
+
+final List<ProductItem> mockProducts = [
+  ProductItem(id: 'p1', name: 'وجبة غداء مشكل فاخر', storeName: 'مطعم السعيد', price: 3500.0, category: 'المطاعم والوجبات'),
+  ProductItem(id: 'p2', name: 'حليب المراعي 1 ليتر', storeName: 'سوبرماركت البركة', price: 1200.0, category: 'السوبرماركت'),
+];
 
 class CartItem {
   final String id;
@@ -62,44 +87,284 @@ class CartManager {
   }
 }
 
-// قائمة المتاجر موزعة حسب الأقسام الحقيقية
-final List<StoreItem> mockStores = [
-  // السوبرماركت
-  StoreItem(id: 's1', name: 'سوبرماركت البركة', category: 'السوبرماركت', rating: '4.8', deliveryTime: '20-30 دقيقة', imageUrl: ''),
-  StoreItem(id: 's2', name: 'أسواق المدينة المركزية', category: 'السوبرماركت', rating: '4.7', deliveryTime: '25-35 دقيقة', imageUrl: ''),
-  
-  // المطاعم والوجبات
-  StoreItem(id: 's3', name: 'مطعم السعيد للمأكولات', category: 'المطاعم والوجبات', rating: '4.6', deliveryTime: '30-45 دقيقة', imageUrl: ''),
-  StoreItem(id: 's4', name: 'مطاعم الشيباني الحديثة', category: 'المطاعم والوجبات', rating: '4.9', deliveryTime: '20-40 دقيقة', imageUrl: ''),
+// شاشة المحفظة والدفع للمستخدم والمدير
+class PaymentWalletScreen extends StatefulWidget {
+  const PaymentWalletScreen({super.key});
 
-  // الصيدليات والأدوية
-  StoreItem(id: 's5', name: 'صيدلية الشفاء الحديثة', category: 'الصيدليات والأدوية', rating: '4.9', deliveryTime: '15-25 دقيقة', imageUrl: ''),
-  StoreItem(id: 's6', name: 'صيدلية العافية الدولية', category: 'الصيدليات والأدوية', rating: '4.8', deliveryTime: '10-20 دقيقة', imageUrl: ''),
+  @override
+  State<PaymentWalletScreen> createState() => _PaymentWalletScreenState();
+}
 
-  // أدوات التجميل
-  StoreItem(id: 's7', name: 'مركز الجمال والأنشطة', category: 'أدوات التجميل', rating: '4.7', deliveryTime: '30-50 دقيقة', imageUrl: ''),
-  StoreItem(id: 's8', name: 'عالم العطور والتجميل', category: 'أدوات التجميل', rating: '4.8', deliveryTime: '25-40 دقيقة', imageUrl: ''),
+class _PaymentWalletScreenState extends State<PaymentWalletScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final activeWallets = mockWallets.where((w) => w.isEnabled).toList();
 
-  // الملابس والأزياء
-  StoreItem(id: 's9', name: 'بوتيك الأزياء العصرية', category: 'الملابس والأزياء', rating: '4.5', deliveryTime: '40-60 دقيقة', imageUrl: ''),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('المحفظة وسداد الفواتير'),
+        backgroundColor: const Color(0xFF1A365D),
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A365D),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Column(
+                    crossAxisAlignment: CrossAlignment.start,
+                    children: [
+                      Text('الرصيد المتاح', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                      SizedBox(height: 5),
+                      Text('150,000 ر.ي', style: TextStyle(color: Colors.amber, fontSize: 24, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  Icon(Icons.account_balance_wallet, color: Colors.white, size: 40),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text('وسائل الدفع الإلكتروني المتاحة:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: activeWallets.length,
+                itemBuilder: (context, index) {
+                  final wallet = activeWallets[index];
+                  return Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.payment, color: Colors.green),
+                      title: Text(wallet.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text('رقم الحساب/المحفظة: ${wallet.accountNumber}'),
+                      trailing: ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1A365D)),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('تم اختيار ${wallet.name} للشحن/الدفع')));
+                        },
+                        child: const Text('دفع / شحن', style: TextStyle(color: Colors.white, fontSize: 12)),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-  // الفنادق والحجوزات
-  StoreItem(id: 's10', name: 'فندق وكافيه الفائق', category: 'الفنادق والحجوزات', rating: '5.0', deliveryTime: 'حجز فوري', imageUrl: ''),
+// شاشة إدارة البائعين والمحافظ (خاصة بالمدير فقط)
+class AdminPanelScreen extends StatefulWidget {
+  const AdminPanelScreen({super.key});
 
-  // المراكز الطبية
-  StoreItem(id: 's11', name: 'مركز الأمل الطبي التخصصي', category: 'المراكز الطبية', rating: '4.9', deliveryTime: 'مواعيد فورية', imageUrl: ''),
+  @override
+  State<AdminPanelScreen> createState() => _AdminPanelScreenState();
+}
 
-  // التوصيل والمالية
-  StoreItem(id: 's12', name: 'خدمات الفائق للتوصيل السريع', category: 'التوصيل والمالية', rating: '4.9', deliveryTime: 'توصيل مباشر', imageUrl: ''),
-];
+class _AdminPanelScreenState extends State<AdminPanelScreen> {
+  final _vendorNameController = TextEditingController();
+  final _vendorCategoryController = TextEditingController();
 
-final List<ProductItem> mockProducts = [
-  ProductItem(id: 'p1', name: 'وجبة غداء مشكل فاخر', storeName: 'مطعم السعيد', price: 3500.0, category: 'المطاعم والوجبات', imageUrl: ''),
-  ProductItem(id: 'p2', name: 'حليب المراعي 1 ليتر', storeName: 'سوبرماركت البركة', price: 1200.0, category: 'السوبرماركت', imageUrl: ''),
-  ProductItem(id: 'p3', name: 'فواكه طبيعية مشكلة', storeName: 'سوبرماركت البركة', price: 800.0, category: 'السوبرماركت', imageUrl: ''),
-];
+  final _walletNameController = TextEditingController();
+  final _walletAccountController = TextEditingController();
 
-// شاشة عرض المتاجر المخصصة لكل قسم
+  void _addVendor() {
+    if (_vendorNameController.text.isNotEmpty) {
+      setState(() {
+        mockStores.add(StoreItem(
+          id: 's${mockStores.length + 1}',
+          name: _vendorNameController.text,
+          category: _vendorCategoryController.text.isEmpty ? 'عام' : _vendorCategoryController.text,
+          rating: '5.0',
+          deliveryTime: '20-30 دقيقة',
+        ));
+      });
+      _vendorNameController.clear();
+      _vendorCategoryController.clear();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم إضافة البائع/المتجر الجديد بنجاح!')));
+    }
+  }
+
+  void _addWallet() {
+    if (_walletNameController.text.isNotEmpty) {
+      setState(() {
+        mockWallets.add(PaymentMethod(
+          id: 'w${mockWallets.length + 1}',
+          name: _walletNameController.text,
+          accountNumber: _walletAccountController.text,
+        ));
+      });
+      _walletNameController.clear();
+      _walletAccountController.clear();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم إضافة المحفظة الإلكترونية بنجاح!')));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('لوحة التحكم الإدارية (المدير)'),
+          backgroundColor: const Color(0xFF1A365D),
+          foregroundColor: Colors.white,
+          bottom: const TabBar(
+            labelColor: Colors.amber,
+            unselectedLabelColor: Colors.white,
+            tabs: [
+              Tab(icon: Icon(Icons.store), text: 'إدارة البائعين'),
+              Tab(icon: Icon(Icons.account_balance), text: 'إدارة المحافظ'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            // تبويب إدارة البائعين
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1A365D)),
+                      icon: const Icon(Icons.add_business, color: Colors.white),
+                      label: const Text('إضافة بائع / متجر جديد', style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => Padding(
+                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 16, right: 16, top: 16),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text('إضافة بائع جديد', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 10),
+                                TextField(controller: _vendorNameController, decoration: const InputDecoration(labelText: 'اسم المتجر / البائع', border: OutlineInputBorder())),
+                                const SizedBox(height: 10),
+                                TextField(controller: _vendorCategoryController, decoration: const InputDecoration(labelText: 'القسم (مطاعم، سوبرماركت...)', border: OutlineInputBorder())),
+                                const SizedBox(height: 15),
+                                ElevatedButton(onPressed: _addVendor, child: const Text('حفظ وإعتماد البائع')),
+                                const SizedBox(height: 15),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: mockStores.length,
+                      itemBuilder: (context, index) {
+                        final store = mockStores[index];
+                        return Card(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: store.isActive ? Colors.green : Colors.red,
+                              child: Icon(Icons.store, color: Colors.white),
+                            ),
+                            title: Text(store.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text('القسم: ${store.category}'),
+                            trailing: Switch(
+                              value: store.isActive,
+                              onChanged: (val) {
+                                setState(() => store.isActive = val);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            // تبويب إدارة المحافظ الإلكترونية
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                      icon: const Icon(Icons.add_card, color: Colors.white),
+                      label: const Text('إضافة محفظة إلكترونية جديدة', style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => Padding(
+                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 16, right: 16, top: 16),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text('إضافة محفظة دُفع جديدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 10),
+                                TextField(controller: _walletNameController, decoration: const InputDecoration(labelText: 'اسم المحفظة / البنك', border: OutlineInputBorder())),
+                                const SizedBox(height: 10),
+                                TextField(controller: _walletAccountController, decoration: const InputDecoration(labelText: 'رقم الحساب / الهاتف', border: OutlineInputBorder())),
+                                const SizedBox(height: 15),
+                                ElevatedButton(onPressed: _addWallet, child: const Text('تفعيل المحفظة')),
+                                const SizedBox(height: 15),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: mockWallets.length,
+                      itemBuilder: (context, index) {
+                        final wallet = mockWallets[index];
+                        return Card(
+                          child: ListTile(
+                            leading: const Icon(Icons.account_balance_wallet, color: Colors.blue),
+                            title: Text(wallet.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text('الحساب: ${wallet.accountNumber}'),
+                            trailing: Switch(
+                              value: wallet.isEnabled,
+                              onChanged: (val) {
+                                setState(() => wallet.isEnabled = val);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// شاشة العرض للأقسام والمتاجر
 class CategoryScreen extends StatelessWidget {
   final String categoryName;
   final Color categoryColor;
@@ -114,8 +379,7 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // تصفية المتاجر حسب القسم المحدد
-    final categoryStores = mockStores.where((s) => s.category == categoryName).toList();
+    final categoryStores = mockStores.where((s) => s.category == categoryName && s.isActive).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -130,7 +394,7 @@ class CategoryScreen extends StatelessWidget {
                 children: [
                   Icon(categoryIcon, size: 70, color: categoryColor.withOpacity(0.4)),
                   const SizedBox(height: 15),
-                  Text('لا توجد متاجر مسجلة حالياً في قسم $categoryName', style: const TextStyle(fontSize: 16, color: Colors.grey)),
+                  Text('لا توجد متاجر معتمدة حالياً في قسم $categoryName', style: const TextStyle(fontSize: 16, color: Colors.grey)),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context),
@@ -152,7 +416,7 @@ class CategoryScreen extends StatelessWidget {
                       child: Icon(categoryIcon, color: categoryColor),
                     ),
                     title: Text(store.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('الوقت المتوقع: ${store.deliveryTime}'),
+                    subtitle: Text('وقت التوصيل: ${store.deliveryTime}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -160,11 +424,6 @@ class CategoryScreen extends StatelessWidget {
                         Text(' ${store.rating}'),
                       ],
                     ),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('تم فتح متجر ${store.name}')),
-                      );
-                    },
                   ),
                 );
               },
@@ -179,41 +438,8 @@ class YemenMapsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('خريطة التوصيل وتحديد الموقع'),
-        backgroundColor: const Color(0xFF1A365D),
-        foregroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              color: Colors.blueGrey[50],
-              child: const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.location_on, size: 60, color: Colors.red),
-                    SizedBox(height: 10),
-                    Text('عدن - خور مكسر', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1A365D)),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم تأكيد موقع التوصيل!')));
-              },
-              child: const Text('تأكيد موقع التوصيل', style: TextStyle(color: Colors.white)),
-            ),
-          )
-        ],
-      ),
+      appBar: AppBar(title: const Text('خريطة التوصيل وتحديد الموقع'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
+      body: Center(child: Text('خريطة التوصيل المباشر')),
     );
   }
 }
@@ -223,28 +449,9 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = CartManager.cartItems;
     return Scaffold(
       appBar: AppBar(title: const Text('سلة التسوق'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
-      body: items.isEmpty
-          ? const Center(child: Text('السلة فارغة'))
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return ListTile(
-                        title: Text(item.name),
-                        subtitle: Text('${item.price} ر.ي x ${item.quantity}'),
-                        trailing: Text('${item.price * item.quantity} ر.ي'),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+      body: const Center(child: Text('سلة التسوق')),
     );
   }
 }
@@ -255,25 +462,8 @@ class AdvancedSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('البحث المتقدم'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: TextField(
-          decoration: InputDecoration(hintText: 'ابحث عن متجر أو منتج...', border: OutlineInputBorder()),
-        ),
-      ),
-    );
-  }
-}
-
-class PaymentWalletScreen extends StatelessWidget {
-  const PaymentWalletScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('المحفظة والدفع الإلكتروني'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
-      body: const Center(child: Text('إدارة الرصيد ووسائل الدفع')),
+      appBar: AppBar(title: const Text('البحث الشامل'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
+      body: const Center(child: Text('البحث عن المتاجر والمنتجات')),
     );
   }
 }
@@ -284,14 +474,18 @@ class VendorDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('لوحة تحكم المدير والتجار'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
+      appBar: AppBar(title: const Text('لوحة تحكم البائع (إضافة المنتجات)'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          ListTile(
-            leading: const Icon(Icons.add_a_photo, color: Colors.blue),
-            title: const Text('إضافة منتج جديد'),
-            onTap: () => Navigator.pushNamed(context, '/add_product'),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.add_a_photo, color: Colors.blue),
+              title: const Text('إضافة منتج جديد لمتجرك'),
+              subtitle: const Text('إدراج الصور، السعر، والتفاصيل'),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () => Navigator.pushNamed(context, '/add_product'),
+            ),
           ),
         ],
       ),

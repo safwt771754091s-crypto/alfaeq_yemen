@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/placeholders.dart';
+import 'screens/vendor_add_product.dart';
 
 void main() {
   runApp(const AlfaeqYemenApp());
@@ -17,7 +18,12 @@ class AlfaeqYemenApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Roboto',
       ),
-      home: const MainNavigationScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainNavigationScreen(),
+        '/add_product': (context) => const VendorAddProductScreen(),
+        '/admin_panel': (context) => const AdminPanelScreen(),
+      },
     );
   }
 }
@@ -35,7 +41,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   final List<String> yemenCities = [
     'عدن - خور مكسر',
-    'عدن - الشيخ عثمان',
     'صنعاء - السبعين',
     'مأرب - المجمع',
     'تعز - شارع جمال',
@@ -58,7 +63,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue[800],
+        selectedItemColor: const Color(0xFF1A365D),
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.grid_view), label: 'الرئيسية'),
@@ -100,44 +105,30 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // شريط البحث
             Container(
               color: const Color(0xFF1A365D),
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: TextField(
+              padding: const EdgeInsets.all(16),
+              child: const TextField(
                 decoration: InputDecoration(
                   hintText: 'ابحث عن صيدلية، مطعم، منتج، أو حجز...',
                   fillColor: Colors.white,
                   filled: true,
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  border: OutlineInputBorder(),
                 ),
               ),
             ),
-
             const SizedBox(height: 15),
-
-            // الأقسام الرئيسية
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text('الأقسام الرئيسية', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 10),
-
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -156,112 +147,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 _buildCategoryCard(context, 'التوصيل والمالية', Icons.local_shipping, Colors.lightBlue),
               ],
             ),
-
-            const SizedBox(height: 25),
-
-            // قسم الأكثر طلباً / المنتجات الشائعة
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('الأكثر طلباً اليوم 🔥', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  TextButton(onPressed: () {}, child: const Text('عرض الكل')),
-                ],
-              ),
-            ),
-
-            SizedBox(
-              height: 190,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: mockProducts.length,
-                itemBuilder: (context, index) {
-                  final p = mockProducts[index];
-                  return Container(
-                    width: 140,
-                    margin: const EdgeInsets.only(left: 12),
-                    child: Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                            child: Image.network(p.imageUrl, height: 90, width: double.infinity, fit: BoxFit.cover,
-                                errorBuilder: (ctx, _, __) => Container(height: 90, color: Colors.grey[300], child: const Icon(Icons.fastfood))),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(p.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13), maxLines: 1),
-                                Text(p.storeName, style: const TextStyle(color: Colors.grey, fontSize: 11)),
-                                const SizedBox(height: 4),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('${p.price} ر.ي', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 12)),
-                                    InkWell(
-                                      onTap: () {
-                                        CartManager.addItem(CartItem(id: p.id, name: p.name, price: p.price));
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('تمت إضافة ${p.name} للسلة'), duration: const Duration(seconds: 1)));
-                                      },
-                                      child: const CircleAvatar(radius: 12, backgroundColor: Color(0xFF1A365D), child: Icon(Icons.add, size: 16, color: Colors.white)),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // المتاجر المقترحة
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('المتاجر المعتمدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            ),
-            const SizedBox(height: 10),
-
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: mockStores.length,
-              itemBuilder: (context, index) {
-                final store = mockStores[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  child: ListTile(
-                    leading: CircleAvatar(backgroundImage: NetworkImage(store.imageUrl), child: const Icon(Icons.store)),
-                    title: Text(store.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('${store.category} • ${store.deliveryTime}'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.star, color: Colors.amber, size: 16),
-                        Text('${store.rating}'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryScreen(categoryName: store.name)));
-                    },
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -274,10 +159,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryScreen(categoryName: title, categoryColor: color, categoryIcon: icon)));
       },
       child: Container(
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -292,42 +174,43 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   Widget _buildMoreMenuScreen(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('المزيد / الإعدادات'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
+      appBar: AppBar(title: const Text('المزيد والإعدادات'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
       body: ListView(
         children: [
-          const UserAccountsDrawerHeader(
-            accountName: Text('صفوت محمد حسان'),
-            accountEmail: Text('الإدارة العلياء - الفائق يمن'),
-            currentAccountPicture: CircleAvatar(backgroundColor: Colors.amber, child: Icon(Icons.person, size: 40, color: Colors.white)),
-            decoration: BoxDecoration(color: Color(0xFF1A365D)),
+          UserAccountsDrawerHeader(
+            accountName: Text(CurrentUser.name),
+            accountEmail: Text(CurrentUser.role == UserRole.admin ? 'الإدارة العليا (المدير)' : 'بائع معتمد - ${CurrentUser.storeName}'),
+            currentAccountPicture: const CircleAvatar(backgroundColor: Colors.amber, child: Icon(Icons.person, size: 40, color: Colors.white)),
+            decoration: const BoxDecoration(color: Color(0xFF1A365D)),
           ),
+          
+          // خيارات الإدارة العليا
           ListTile(
             leading: const Icon(Icons.admin_panel_settings, color: Colors.red),
-            title: const Text('لوحة تحكم المدير والتجار', style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: const Text('إضافة وتعديل المنتجات والمتاجر والطلبات'),
+            title: const Text('لوحة تحكم المدير (إضافة بائعين ومحافظ)', style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: const Text('إدارة التجار وتكشيف وتفعيل المحافظ الإلكترونية'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              Navigator.pushNamed(context, '/admin_panel');
+            },
+          ),
+          const Divider(),
+
+          // خيارات البائع
+          ListTile(
+            leading: const Icon(Icons.add_shopping_cart, color: Colors.blue),
+            title: const Text('لوحة البائع (إضافة المنتجات)', style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: const Text('إضافة منتجات وأسعار جديدة لمتجرك'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const VendorDashboardScreen()));
             },
           ),
           const Divider(),
+
           ListTile(
-            leading: const Icon(Icons.map, color: Colors.blue),
-            title: const Text('خريطة التوصيل وتحديد الموقع'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const YemenMapsScreen()));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.shopping_cart, color: Colors.green),
-            title: const Text('سلة التسوق'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.account_balance_wallet, color: Colors.orange),
-            title: const Text('المحفظة والرصيد'),
+            leading: const Icon(Icons.account_balance_wallet, color: Colors.green),
+            title: const Text('المحفظة وسداد الفواتير'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentWalletScreen()));
             },
