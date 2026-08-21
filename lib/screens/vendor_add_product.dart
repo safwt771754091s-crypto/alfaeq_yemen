@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/firebase_service.dart';
 
 class VendorAddProductScreen extends StatefulWidget {
   const VendorAddProductScreen({super.key});
@@ -11,66 +10,74 @@ class VendorAddProductScreen extends StatefulWidget {
 class _VendorAddProductScreenState extends State<VendorAddProductScreen> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
-  final _storeIdController = TextEditingController();
-  final FirebaseService _service = FirebaseService();
-  bool _isLoading = false;
+  final _descController = TextEditingController();
+  String _selectedCategory = 'المطاعم والوجبات';
 
-  void _submitData() async {
-    if (_nameController.text.isEmpty || _priceController.text.isEmpty) return;
-
-    setState(() => _isLoading = true);
-
-    try {
-      await _service.addProduct({
-        'name': _nameController.text,
-        'price': double.parse(_priceController.text),
-        'storeId': _storeIdController.text.isEmpty ? 'default_store' : _storeIdController.text,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تمت إضافة المنتج بنجاح!')),
-        );
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ في الإضافة: $e')),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
+  final List<String> _categories = [
+    'الملابس والأزياء',
+    'أدوات التجميل',
+    'المطاعم والوجبات',
+    'السوبرماركت',
+    'الفنادق والحجوزات',
+    'الصيدليات والأدوية',
+    'المراكز الطبية',
+    'التوصيل والمالية'
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('إضافة منتج جديد')),
+      appBar: AppBar(
+        title: const Text('إضافة منتج جديد'),
+        backgroundColor: const Color(0xFF1A365D),
+        foregroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'اسم المنتج'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _priceController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'السعر (ر.ي)'),
-            ),
-            const SizedBox(height: 20),
-            _isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _submitData,
-                    child: const Text('حفظ ونشر المنتج'),
-                  ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAlignment.start,
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'اسم المنتج', border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _priceController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: 'السعر (ريال يمني)', border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 15),
+              DropdownButtonFormField<String>(
+                value: _selectedCategory,
+                decoration: const InputDecoration(labelText: 'القسم', border: OutlineInputBorder()),
+                items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                onChanged: (val) => setState(() => _selectedCategory = val!),
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _descController,
+                maxLines: 3,
+                decoration: const InputDecoration(labelText: 'وصف المنتج', border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 25),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1A365D)),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('تم حفظ المنتج بنجاح!')),
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: const Text('حفظ ونشر المنتج', style: TextStyle(color: Colors.white, fontSize: 16)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
