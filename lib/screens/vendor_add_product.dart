@@ -8,21 +8,34 @@ class VendorAddProductScreen extends StatefulWidget {
 }
 
 class _VendorAddProductScreenState extends State<VendorAddProductScreen> {
-  final _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _productNameController = TextEditingController();
   final _priceController = TextEditingController();
-  final _descController = TextEditingController();
+  final _descriptionController = TextEditingController();
   String _selectedCategory = 'المطاعم والوجبات';
 
   final List<String> _categories = [
-    'الملابس والأزياء',
-    'أدوات التجميل',
     'المطاعم والوجبات',
     'السوبرماركت',
-    'الفنادق والحجوزات',
     'الصيدليات والأدوية',
+    'أدوات التجميل',
+    'الملابس والأزياء',
+    'الفنادق والحجوزات',
     'المراكز الطبية',
-    'التوصيل والمالية'
+    'التوصيل والمالية',
   ];
+
+  void _saveProduct() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('تم إضافة المنتج "${_productNameController.text}" بنجاح!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,46 +47,120 @@ class _VendorAddProductScreenState extends State<VendorAddProductScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAlignment.start,
+        child: Form(
+          key: _formKey,
+          child: ListView(
             children: [
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'اسم المنتج', border: OutlineInputBorder()),
+              // اختيار صوره للمنتج
+              GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('اختيار صورة من المعرض...')),
+                  );
+                },
+                child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade400),
+                  ),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.add_a_photo, size: 40, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text('اضغط لإضافة صورة المنتج', style: TextStyle(color: Colors.grey)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // اسم المنتج
+              TextFormField(
+                controller: _productNameController,
+                decoration: const InputDecoration(
+                  labelText: 'اسم المنتج',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.shopping_bag),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'يرجى إدخال اسم المنتج';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 15),
-              TextField(
+
+              // السعر
+              TextFormField(
                 controller: _priceController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'السعر (ريال يمني)', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                  labelText: 'السعر (ريال يمني)',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.attach_money),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'يرجى إدخال السعر';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 15),
+
+              // اختيار القسم
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                decoration: const InputDecoration(labelText: 'القسم', border: OutlineInputBorder()),
-                items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
-                onChanged: (val) => setState(() => _selectedCategory = val!),
+                decoration: const InputDecoration(
+                  labelText: 'القسم',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.category),
+                ),
+                items: _categories.map((String category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedCategory = newValue!;
+                  });
+                },
               ),
               const SizedBox(height: 15),
-              TextField(
-                controller: _descController,
+
+              // الوصف
+              TextFormField(
+                controller: _descriptionController,
                 maxLines: 3,
-                decoration: const InputDecoration(labelText: 'وصف المنتج', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                  labelText: 'وصف المنتج (اختياري)',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.description),
+                ),
               ),
               const SizedBox(height: 25),
+
+              // زر الحفظ
               SizedBox(
-                width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1A365D)),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('تم حفظ المنتج بنجاح!')),
-                    );
-                    Navigator.pop(context);
-                  },
-                  child: const Text('حفظ ونشر المنتج', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1A365D),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: _saveProduct,
+                  child: const Text(
+                    'حفظ ونشر المنتج',
+                    style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
