@@ -15,14 +15,18 @@ class CartItem {
   });
 }
 
-// مدير السلة وحساب المبالغ
+// مدير السلة
 class CartManager {
   static final List<CartItem> items = [];
   static final ValueNotifier<int> itemCountNotifier = ValueNotifier<int>(0);
 
   static int get totalCount => items.fold(0, (sum, item) => sum + item.quantity);
 
-  static double get totalPrice => items.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+  // إرجاع القيمة كـ int مباشرة لتطابق المتغير int totalCartPrice في main.dart
+  static int get totalPrice {
+    double sum = items.fold(0.0, (s, item) => s + (item.price * item.quantity));
+    return sum.toInt();
+  }
 
   static void addItem(CartItem item) {
     int index = items.indexWhere((i) => i.id == item.id);
@@ -45,7 +49,7 @@ class CartManager {
   }
 }
 
-// الشاشات المؤقتة لتفادي أخطاء البناء
+// الشاشات
 class DynamicPlaceholderScreen extends StatelessWidget {
   final String title;
   const DynamicPlaceholderScreen({super.key, required this.title});
@@ -95,7 +99,18 @@ class VendorDashboardScreen extends StatelessWidget {
   }
 }
 
-// شاشة السلة التفاعلية
+class PaymentWalletScreen extends StatelessWidget {
+  const PaymentWalletScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('المحفظة / وسائل الدفع')),
+      body: const Center(child: Text('صفحة إدارة المحفظة والدفع')),
+    );
+  }
+}
+
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
@@ -139,7 +154,7 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('المجموع الكلي:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      Text('\$${CartManager.totalPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                      Text('\$${CartManager.totalPrice.toString()}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
                     ],
                   ),
                 )
