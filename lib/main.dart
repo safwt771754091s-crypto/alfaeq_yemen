@@ -63,7 +63,55 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               ),
               child:  Text('نعم، خروج', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             ),
-          ],
+          
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text('المتاجر الأكثر شعبية', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 140,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: mockStores.length,
+                itemBuilder: (context, index) {
+                  final store = mockStores[index];
+                  return Container(
+                    width: 200,
+                    margin: const EdgeInsets.only(left: 12),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAlignment.start,
+                          children: [
+                            Text(store.name, style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 1),
+                            Text(store.category, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                            const Spacer(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(store.deliveryTime, style: const TextStyle(fontSize: 11, color: Colors.blue)),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.star, color: Colors.amber, size: 14),
+                                    Text('${store.rating}', style: const TextStyle(fontSize: 12)),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+],
         ),
       ),
     );
