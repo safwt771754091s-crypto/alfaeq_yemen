@@ -49,3 +49,8 @@ class CartScreen extends StatelessWidget {
     );
   }
 }
+
+class CartManager {
+  static int totalCount = 0;
+  static ValueNotifier<int> itemCountNotifier = ValueNotifier<int>(0);
+}
