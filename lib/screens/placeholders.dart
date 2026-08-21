@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 enum UserRole { admin, vendor, customer }
 
 class CurrentUser {
-  static UserRole role = UserRole.admin; // تعيين الدور الحالي للاختبار
+  static UserRole role = UserRole.admin;
   static String name = "صفوت محمد حسان";
   static String storeName = "متجر الفائق الإلكتروني";
 }
@@ -56,11 +56,6 @@ final List<StoreItem> mockStores = [
   StoreItem(id: 's4', name: 'مركز الجمال والأناقة', category: 'أدوات التجميل', rating: '4.7', deliveryTime: '25-40 دقيقة'),
 ];
 
-final List<ProductItem> mockProducts = [
-  ProductItem(id: 'p1', name: 'وجبة غداء مشكل فاخر', storeName: 'مطعم السعيد', price: 3500.0, category: 'المطاعم والوجبات'),
-  ProductItem(id: 'p2', name: 'حليب المراعي 1 ليتر', storeName: 'سوبرماركت البركة', price: 1200.0, category: 'السوبرماركت'),
-];
-
 class CartItem {
   final String id;
   final String name;
@@ -109,7 +104,7 @@ class _PaymentWalletScreenState extends State<PaymentWalletScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.all(20),
@@ -121,7 +116,7 @@ class _PaymentWalletScreenState extends State<PaymentWalletScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Column(
-                    crossAxisAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('الرصيد المتاح', style: TextStyle(color: Colors.white70, fontSize: 14)),
                       SizedBox(height: 5),
@@ -233,7 +228,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         ),
         body: TabBarView(
           children: [
-            // تبويب إدارة البائعين
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -278,7 +272,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor: store.isActive ? Colors.green : Colors.red,
-                              child: Icon(Icons.store, color: Colors.white),
+                              child: const Icon(Icons.store, color: Colors.white),
                             ),
                             title: Text(store.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                             subtitle: Text('القسم: ${store.category}'),
@@ -296,8 +290,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                 ],
               ),
             ),
-
-            // تبويب إدارة المحافظ الإلكترونية
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -317,7 +309,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text('إضافة محفظة دُفع جديدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                const Text('إضافة محفظة دفع جديدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 10),
                                 TextField(controller: _walletNameController, decoration: const InputDecoration(labelText: 'اسم المحفظة / البنك', border: OutlineInputBorder())),
                                 const SizedBox(height: 10),
@@ -364,7 +356,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
   }
 }
 
-// شاشة العرض للأقسام والمتاجر
 class CategoryScreen extends StatelessWidget {
   final String categoryName;
   final Color categoryColor;
@@ -439,7 +430,7 @@ class YemenMapsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('خريطة التوصيل وتحديد الموقع'), backgroundColor: const Color(0xFF1A365D), foregroundColor: Colors.white),
-      body: Center(child: Text('خريطة التوصيل المباشر')),
+      body: const Center(child: Text('خريطة التوصيل المباشر')),
     );
   }
 }
