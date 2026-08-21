@@ -48,7 +48,7 @@ class CartManager {
   }
 }
 
-// الشاشات
+// الشاشات المطلوبة في المشروع
 class DynamicPlaceholderScreen extends StatelessWidget {
   final String title;
   const DynamicPlaceholderScreen({super.key, required this.title});
@@ -118,6 +118,18 @@ class YemenMapsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('خرائط اليمن / التوصيل')),
       body: const Center(child: Text('صفحة الخرائط والتوصيل')),
+    );
+  }
+}
+
+class AdvancedSearchScreen extends StatelessWidget {
+  const AdvancedSearchScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('البحث المتقدم')),
+      body: const Center(child: Text('صفحة البحث المتقدم')),
     );
   }
 }
