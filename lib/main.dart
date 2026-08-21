@@ -1,14 +1,6 @@
-import 'screens/vendor_dashboard_screen.dart';
+import 'screens/placeholders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'screens/vendor_dashboard.dart';
-import 'screens/yemen_maps.dart';
-import 'screens/payment_wallet.dart';
-import 'screens/super_admin_dashboard.dart';
-import 'screens/offline_cache_service.dart';
-import 'screens/notification_service.dart';
-import 'screens/category_screen.dart';
-import 'screens/cart_screen.dart';
 
 void main() {
   runApp( AlFaeqApp());
