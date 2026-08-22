@@ -16,6 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
     {'title': 'الملابس والأزياء', 'icon': Icons.checkroom, 'color': Colors.blue, 'route': '/fashion'},
     {'title': 'التوصيل والطلبات', 'icon': Icons.local_shipping, 'color': Colors.teal, 'route': '/delivery'},
     {'title': 'الصيدليات والأدوية', 'icon': Icons.local_hospital, 'color': Colors.red, 'route': '/pharmacy'},
+    {'title': 'المراكز الطبية', 'icon': Icons.medical_services, 'color': Colors.indigo, 'route': '/medical'},
+    {'title': 'الفنادق والحجوزات', 'icon': Icons.hotel, 'color': Colors.brown, 'route': '/hotels'},
   ];
 
   @override
@@ -36,14 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  CurrentUser.name, // ظهور اسمك صفوت محمد حسان بشكل واضح
+                  CurrentUser.name, // ظهور اسمك صفوت محمد حسان
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 const Row(
                   children: [
                     Icon(Icons.location_on, color: Colors.amber, size: 12),
                     SizedBox(width: 2),
-                    Text('اليمن - صنعاء / عدن', style: TextStyle(fontSize: 11, color: Colors.white70)),
+                    Text('عدن - خور مكسر', style: TextStyle(fontSize: 11, color: Colors.white70)),
                   ],
                 ),
               ],
@@ -56,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // بنر ترحيبي عالي الجودة
+            // بنر ترحيبي
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -88,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1.1,
+                crossAxisCount: 4,
+                childAspectRatio: 0.85,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
@@ -107,9 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(cat['icon'], color: cat['color'], size: 30),
+                        Icon(cat['icon'], color: cat['color'], size: 28),
                         const SizedBox(height: 6),
-                        Text(cat['title'], style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                        Text(cat['title'], style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -121,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text('المنتجات المضافة حديثاً 🔥', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1A365D))),
             const SizedBox(height: 10),
 
-            // إظهار منتج راني المضاف مباشرة
+            // إظهار منتج راني المضاف والمنتجات الأخرى
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
